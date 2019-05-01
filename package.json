@@ -1,0 +1,23 @@
+{
+  "name": "lirialp",
+  "version": "1.0.0",
+  "description": "Liri Bot, language interpretation and recognition interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apizarras/LiriALP.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/apizarras/LiriALP/issues"
+  },
+  "homepage": "https://github.com/apizarras/LiriALP#readme",
+  "dependencies": {
+    "dotenv": "^7.0.0"
+  }
+}
