@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/apizarras/LiriALP#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "dotenv": "^7.0.0"
   }
 }
