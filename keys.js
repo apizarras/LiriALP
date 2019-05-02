@@ -6,6 +6,6 @@ exports.spotify = {
 };
 
 exports.ticketmaster = {
-  id: process.env.Consumer_Key,
-  secret: process.env.Consumer_Secret
+  id: process.env.TICKETMASTER_KEY,
+  secret: process.env.TICKETMASTER_SECRET
 };

@@ -9,8 +9,9 @@ const axios = require("axios");
 const inquirer = require("inquirer");
 
 const moment = require("moment");
-console.log("let's get started");
-console.log(keys);
+
+// const spotify = new Spotify(keys.spotify);
+
 //inquirer to ask the user to select a command
 //inquirer to ask the user to select option(artist, song, movie, etc.)
 //use if statement
@@ -29,6 +30,8 @@ inquirer
     .then(function(search) {
      if(search.searchType==="search-concerts") {
         console.log("selected concerts");
+        // const tmKey = process.env.Consumer_Key;
+        // const tmSecret = process.env.Consumer_Secret;
         inquirer
             .prompt([
             {
@@ -44,16 +47,15 @@ inquirer
                 } else {
                     const event = response.event;
                     console.log("upcoming shows for " + event);
-                    getEventData();
-                    console.log("line after get function")
-                    // console.log('changed');
-                    // axios
-                    //     .get("https://app.ticketmaster.com/discovery/v2/events.json?apikey="+"key goes here").then(function (response) {
-                    //     console.log(response);
-                // })
+                    console.log(keys);
+                    axios
+                        .get("https://app.ticketmaster.com/discovery/v2/events.json?apikey="+"key goes here").then(function (response) {
+                        console.log(response);
+                })
         .catch(function(err) {
             console.log("This err is from the getEventData function");
         });
+            console.log("line after get function")
                     }
                 })
                 .catch(function(err) {
@@ -64,7 +66,7 @@ inquirer
 
 function getEventData() {
     axios
-        .get("https://app.ticketmaster.com/discovery/v2/events.json?apikey="+'TMkey goes here').then(function (response) {
+        .get("https://app.ticketmaster.com/discovery/v2/events.json?apikey="+ticketmaster.Consumer_Key).then(function (response) {
             console.log(response);
             // for (i = 0; i < 5; i++) {
             //     console.log("Concert Venue: " + response.data[i].venue.name);
