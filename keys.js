@@ -12,3 +12,6 @@ exports.ticketmaster = {
 const ticketmasterKey = process.env.TICKETMASTER_KEY;
 
 
+exports.omdb = {
+  id: process.env.OMDB_KEY
+}

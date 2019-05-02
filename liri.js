@@ -58,6 +58,37 @@ inquirer
                 console.log("This err is from the catch after response.event");
             });
         };
+        if(search.searchType==="search-movies"){
+            inquirer
+                .prompt([
+                    {
+                        type: "input",
+                        name: "movie",
+                        message: "What movie would you like to look up?"
+                    }
+                ])
+                .then(function(response){
+                    if(response.event==="") {
+                        const movie = "The Matrix"
+                        console.log(movie);
+                    } else {
+                        const movie = response.movie;
+                        console.log("omdb movie data " + movie);
+                            axios
+                                .get("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&apikey="+keys.omdb.id)
+                                .then(function(response) {
+                                    console.log(response.data);
+                                    console.log("Title: " + response.data.Title)
+                                })
+                                .catch(function (err) {
+                                    console.log("This is the error from getMovieData");
+                                });
+                    }
+                })
+                .catch(function(err) {
+                    console.log("This err is from the catch");
+                });
+        };
         if(search.searchType==="search-songs") {
             inquirer
                 .prompt([
@@ -108,7 +139,7 @@ function getEventData() {
         .catch(function (err) {
             console.log("Please check your spelling and try again.");
         });
-    }
+    };
 
 
     
