@@ -19,9 +19,11 @@
   "homepage": "https://github.com/apizarras/LiriALP#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "axios-debug": "0.0.4",
     "dotenv": "^7.0.0",
     "inquirer": "^6.3.1",
     "moment": "^2.24.0",
+    "spotify": "^0.3.0",
     "ticketmaster": "^2.0.4"
   }
 }
