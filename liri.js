@@ -50,7 +50,14 @@ inquirer
                 } else {
                     const event = response.event;
                     console.log("upcoming shows for " + event);
-                    getEventData();
+                    axios
+                        .get("https://app.ticketmaster.com/discovery/v2/classifications.json?keyword="+event+"&apikey="+keys.ticketmaster.id)
+                        .then(response2=> {
+                            console.log(response2);
+                        })
+                        .catch(err => {
+                            console.log("This err is from the getEventData function"+err);
+                        });
                     console.log("line after get function")
             }
         })
@@ -67,27 +74,24 @@ inquirer
                         message: "What movie would you like to look up?"
                     }
                 ])
-                .then(function(response){
-                    if(response.event==="") {
+                .then(function(response3){
+                    if(response3.event==="") {
                         const movie = "The Matrix"
                         console.log(movie);
                     } else {
-                        const movie = response.movie;
+                        const movie = response3.movie;
                         console.log("omdb movie data " + movie);
                             axios
                                 .get("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&apikey="+keys.omdb.id)
-                                .then(function(response) {
-                                    console.log(response.data);
-                                    console.log("Title: " + response.data.Title)
+                                .then(function(response4) {
+                                    console.log(response4.data);
+                                    console.log("Title: " + response4.data.Title)
                                 })
-                                .catch(function (err) {
-                                    console.log("This is the error from getMovieData");
-                                });
-                    }
+                            }
                 })
                 .catch(function(err) {
-                    console.log("This err is from the catch");
-                });
+                    console.log("This err is from the catch"+error);
+                })
         };
         if(search.searchType==="search-songs") {
             inquirer
@@ -98,14 +102,25 @@ inquirer
                         message: "What is the song title you would like to search?"
                     }
                 ])
-                .then(function(response) {
-                    if(response.event==="") {
+                .then(function(response5) {
+                    if(response5.event==="") {
                         const trackName = "All You Need Is Love"
-                        console.log(trackName);
+                        console.log("default when nothing entered: "+trackName);
                     } else {
-                        const trackName = response.trackName;
+                        const trackName = response5.trackName;
                         console.log("spotify song data " + trackName);
-                        getSongData();
+                    
+                        spotify
+                        .search({ type: 'track', query: trackName })
+                        .then(function (response6) {
+                            console.log('Title: ' + response6.tracks.items[0].name);
+                            console.log('Artist: ' + response6.tracks.items[0].artists[0].name);
+                            console.log('From the album: ' + response6.tracks.items[0].album.name);
+                            console.log('Open in browser: ' + response6.tracks.items[0].external_urls.spotify)
+                        })
+                        .catch(function (err) {
+                            console.log("Please check your spelling and try again.");
+                        });
                         console.log("line after get function")
                 }
             })
@@ -115,31 +130,6 @@ inquirer
         }
     });
 
-function getEventData() {
-    console.log("getEventData function started");
-    console.log(TICKETMASTER_KEY);
-    axios
-        .get("https://app.ticketmaster.com/discovery/v2/events.json?keyword="+event+"&apikey="+TICKETMASTER_KEY).then(response=> {
-            console.log(response.data);
-        })
-        .catch(err => {
-            console.log("This err is from the getEventData function"+err.response);
-        });
-    };
-
-    function getSongData() {
-        spotify
-        .search({ type: 'track', query: trackName })
-        .then(function (response) {
-            console.log('Title: ' + response.tracks.items[0].name);
-            console.log('Artist: ' + response.tracks.items[0].artists[0].name);
-            console.log('From the album: ' + response.tracks.items[0].album.name);
-            console.log('Open in browser: ' + response.tracks.items[0].external_urls.spotify)
-        })
-        .catch(function (err) {
-            console.log("Please check your spelling and try again.");
-        });
-    };
 
 
     

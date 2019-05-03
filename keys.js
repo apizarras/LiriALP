@@ -9,9 +9,6 @@ exports.ticketmaster = {
   secret: process.env.TICKETMASTER_SECRET
 };
 
-const ticketmasterKey = process.env.TICKETMASTER_KEY;
-
-
 exports.omdb = {
   id: process.env.OMDB_KEY
 }
