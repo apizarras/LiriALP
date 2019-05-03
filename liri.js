@@ -124,7 +124,7 @@ inquirer
                 })
         }
         
-        if (search.searchType === "do-what-it-says"
+        if (search.searchType === "feeling-lucky"
         ) {
             inquirer
                 .prompt([
@@ -143,19 +143,17 @@ inquirer
                             }
                             else {
                                 trackName = data;
-
-                                axios
-                                    .get("http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=e189c826")
-                                    .then(function (response) {
-                                        console.log("Title: " + response.data.Title);
-                                        console.log("Release Year: " + response.data.Year);
-                                        console.log("IMDB Rating: " + response.data.imdbRating);
-                                        console.log("Country: " + response.data.Country);
-                                        console.log("Language: " + response.data.Language);
-                                        console.log("Plot Summary: " + response.data.Plot);
-                                        console.log("Cast: " + response.data.Actors)
-                                    })
+                                console.log(trackName)
                             }
+                            
+                        spotify
+                        .search({ type: "track", query: trackName })
+                        .then(function (response) {
+                            console.log("Title: "+response.tracks.items[0].name);
+                            console.log("Artist: "+response.tracks.items[0].artists[0].name);
+                            console.log("From the album: "+response.tracks.items[0].album.name);
+                            console.log("Open in browser: "+response.tracks.items[0].external_urls.spotify)
+                        })
                           
                         })
                     }
