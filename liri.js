@@ -118,16 +118,6 @@ inquirer
 
                             console.log(result.data);
                         })
-
-                    // axios
-                    //     .get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp")
-                    //     .then(function (response) {
-                    //         for (i = 0; i < 5; i++) {
-                    //             console.log("Concert Venue: " + response.data[i].venue.name);
-                    //             console.log("Location: " + response.data[i].venue.city + ", " + response.data[i].venue.region + ", " + response.data[i].venue.country)
-                    //             console.log("Date: " + moment(response.data[i].datetime).format("dddd, MMMM Do YYYY, h:mm:ss a") + "\n");
-                    //         }
-                    //     })
                         .catch(function (err) {
                             console.log("What you entered is not recognized. Please try again and check your spelling.");
                         });
