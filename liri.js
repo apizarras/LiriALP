@@ -1,138 +1,174 @@
 require("dotenv").config();
-
-const fs = require("fs");
-
 const keys = require("./keys.js");
-
-const axios = require("axios");
-const axiosDebug = require('axios-debug')(axios);
-
-const inquirer = require("inquirer");
-
-const moment = require("moment");
-
-const ticketmaster = require("ticketmaster");
-
-const Spotify = require("node-spotify-api");
-
-const spotify = new Spotify(keys.spotify);
-
-//inquirer to ask the user to select a command
-//inquirer to ask the user to select option(artist, song, movie, etc.)
-//use if statement
-
-//axios.get("url") for ticket master, spotify, omdb
+var Spotify = require("node-spotify-api");
+var axios = require("axios");
+var moment = require("moment");
+var inquirer = require("inquirer");
+var spotify = new Spotify(keys.spotify);
+var fs = require("fs");
+var ticketmaster = require("ticketmaster");
 
 inquirer
     .prompt([
-    {
-        type: "list",
-        name: "searchType",
-        message: "What would you like to search for?",
-        choices: ["search-concerts", "search-songs", "search-movies", "feeling-lucky"]
-    }
-])
-    .then(function(search) {
-     if(search.searchType==="search-concerts") {
-        console.log("user selected concerts");
-        inquirer
-            .prompt([
-            {
-                type: "input",
-                name: "event",
-                message: "What artist or band are you searching for?"
-            }
-        ])
-            .then(function(response) {
-                if(response.event==="") {
-                    const event = "Houston Symphony"
-                    console.log(event);
-                } else {
-                    const event = response.event;
-                    console.log("upcoming shows for " + event);
-                    axios
-                        .get("https://app.ticketmaster.com/discovery/v2/classifications.json?keyword="+event+"&apikey="+keys.ticketmaster.id)
-                        .then(response2=> {
-                            console.log(response2);
-                        })
-                        .catch(err => {
-                            console.log("This err is from the getEventData function"+err);
-                        });
-                    console.log("line after get function")
-            }
-        })
-            .catch(function(err) {
-                console.log("This err is from the catch after response.event");
-            });
-        };
-        if(search.searchType==="search-movies"){
+
+        {
+            type: "list",
+            message: "What would you like to search for today?",
+            choices: ["search-concerts", "search-songs", "search-movies", "feeling-lucky"],
+            name: "searchType"
+
+        }
+    ])
+
+    .then(function (search) {
+        if (search.searchType === "search-songs") {
             inquirer
                 .prompt([
+
                     {
                         type: "input",
-                        name: "movie",
-                        message: "What movie would you like to look up?"
+                        message: "Enter a song name",
+                        name: "name"
                     }
                 ])
-                .then(function(response3){
-                    if(response3.event==="") {
-                        const movie = "The Matrix"
-                        console.log(movie);
+                .then(function (response) {
+                    if (response.name == ""
+                    ) {
+                        var trackName = "Closer";
+                        console.log("You did not enter a song, so we chose to search for: "+trackName);
                     } else {
-                        const movie = response3.movie;
-                        console.log("omdb movie data " + movie);
-                            axios
-                                .get("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&apikey="+keys.omdb.id)
-                                .then(function(response4) {
-                                    console.log(response4.data);
-                                    console.log("Title: " + response4.data.Title)
-                                })
-                            }
-                })
-                .catch(function(err) {
-                    console.log("This err is from the catch"+error);
-                })
-        };
-        if(search.searchType==="search-songs") {
-            inquirer
-                .prompt([
-                    {
-                        type: "input",
-                        name: "trackName",
-                        message: "What is the song title you would like to search?"
+                        var trackName = response.name;
                     }
-                ])
-                .then(function(response5) {
-                    if(response5.event==="") {
-                        const trackName = "All You Need Is Love"
-                        console.log("default when nothing entered: "+trackName);
-                    } else {
-                        const trackName = response5.trackName;
-                        console.log("spotify song data " + trackName);
                     
-                        spotify
-                        .search({ type: 'track', query: trackName })
-                        .then(function (response6) {
-                            console.log('Title: ' + response6.tracks.items[0].name);
-                            console.log('Artist: ' + response6.tracks.items[0].artists[0].name);
-                            console.log('From the album: ' + response6.tracks.items[0].album.name);
-                            console.log('Open in browser: ' + response6.tracks.items[0].external_urls.spotify)
+                    spotify
+                        .search({ type: "track", query: trackName })
+                        .then(function (response) {
+                            console.log("Title: "+response.tracks.items[0].name);
+                            console.log("Artist: "+response.tracks.items[0].artists[0].name);
+                            console.log("From the album: "+response.tracks.items[0].album.name);
+                            console.log("Open in browser: "+response.tracks.items[0].external_urls.spotify)
                         })
                         .catch(function (err) {
-                            console.log("Please check your spelling and try again.");
+                            console.log("What you entered is not recognized. Please try again and check your spelling.");
                         });
-                        console.log("line after get function")
-                }
-            })
-            .catch(function(err) {
-                console.log("This err is from the catch after response.event");
-            });
+                });
         }
-    });
-
-
-
     
 
+        if (search.searchType === "search-movies"
+        ) {
+            inquirer
+                .prompt([
 
+                    {
+                        type: "input",
+                        message: "Enter a movie name",
+                        name: "name"
+                    }
+                ])
+                .then(function (response) {
+                    if (response.name == ""
+                    ) {
+                        var movieName = "Titanic";
+                        console.log("You didn't enter a movie name, so we chose: "+movieName);
+                    } else {
+                        var movieName = response.name;
+                    }
+                    axios
+                        .get("http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey="+keys.omdb.id)
+                        .then(function (response) {
+                            console.log("Title: " + response.data.Title);
+                            console.log("Release Year: " + response.data.Year);
+                            console.log("IMDB Rating: " + response.data.imdbRating);
+                            console.log("Country: " + response.data.Country);
+                            console.log("Language: " + response.data.Language);
+                            console.log("Plot Summary: " + response.data.Plot);
+                            console.log("Cast: " + response.data.Actors)
+                        })
+                        .catch(function (err) {
+                            console.log("What you entered is not recognized. Please try again and check your spelling.");
+                        });
+                })
+        }
+        
+        if (search.searchType === "search-concerts"
+        ) {
+            inquirer
+                .prompt([
 
+                    {
+                        type: "input",
+                        message: "Enter a band/artist name",
+                        name: "name"
+                    }
+                ])
+                .then(function (response) {
+
+                    if (response.name == ""
+                    ) {
+                        var artist = "Pink"
+                        console.log("You didn't enter anything, so we searched for: "+artist+"\n");
+                    } else {
+                        var artist = response.name;
+                        console.log("Upcoming shows for "+ artist + "\n");
+                    }
+                    axios
+                        .get("https://app.ticketmaster.com/discovery/v2/events.json?&keyword="+artist+"&apikey="+keys.ticketmaster.id)
+                        .then(function(result) {
+
+                            console.log(result.data);
+                        })
+
+                    // axios
+                    //     .get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp")
+                    //     .then(function (response) {
+                    //         for (i = 0; i < 5; i++) {
+                    //             console.log("Concert Venue: " + response.data[i].venue.name);
+                    //             console.log("Location: " + response.data[i].venue.city + ", " + response.data[i].venue.region + ", " + response.data[i].venue.country)
+                    //             console.log("Date: " + moment(response.data[i].datetime).format("dddd, MMMM Do YYYY, h:mm:ss a") + "\n");
+                    //         }
+                    //     })
+                        .catch(function (err) {
+                            console.log("What you entered is not recognized. Please try again and check your spelling.");
+                        });
+                })
+        }
+        
+        if (search.searchType === "do-what-it-says"
+        ) {
+            inquirer
+                .prompt([
+                    {
+                        type: "confirm",
+                        name: "confirm",
+                        message: "Are you sure?",
+                        default: true,
+                    }
+                ])
+                .then(function (response) {
+                    if (response) {
+                        fs.readFile("random.txt", "utf8", function (error, data) {
+                            if (error) {
+                                return console.log(error);
+                            }
+                            else {
+                                trackName = data;
+
+                                axios
+                                    .get("http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=e189c826")
+                                    .then(function (response) {
+                                        console.log("Title: " + response.data.Title);
+                                        console.log("Release Year: " + response.data.Year);
+                                        console.log("IMDB Rating: " + response.data.imdbRating);
+                                        console.log("Country: " + response.data.Country);
+                                        console.log("Language: " + response.data.Language);
+                                        console.log("Plot Summary: " + response.data.Plot);
+                                        console.log("Cast: " + response.data.Actors)
+                                    })
+                            }
+                          
+                        })
+                    }
+                })
+        }
+    })

@@ -2,7 +2,7 @@
   "name": "lirialp",
   "version": "1.0.0",
   "description": "Liri Bot, language interpretation and recognition interface",
-  "main": "./assets/js/liri.js",
+  "main": "./liri.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
