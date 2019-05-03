@@ -69,7 +69,7 @@ inquirer
                 .then(function (response) {
                     if (response.name == ""
                     ) {
-                        var movieName = "Titanic";
+                        var movieName = "Mr. Nobody";
                         console.log("You didn't enter a movie name, so we chose: "+movieName);
                     } else {
                         var movieName = response.name;
@@ -83,7 +83,7 @@ inquirer
                             console.log("Country: " + response.data.Country);
                             console.log("Language: " + response.data.Language);
                             console.log("Plot Summary: " + response.data.Plot);
-                            console.log("Cast: " + response.data.Actors)
+                            console.log("Actors: " + response.data.Actors)
                         })
                         .catch(function (err) {
                             console.log("What you entered is not recognized. Please try again and check your spelling.");
@@ -98,7 +98,7 @@ inquirer
 
                     {
                         type: "input",
-                        message: "Enter a band/artist name",
+                        message: "What band/artist events are you looking for?",
                         name: "name"
                     }
                 ])
@@ -115,8 +115,8 @@ inquirer
                     axios
                         .get("https://app.ticketmaster.com/discovery/v2/events.json?&keyword="+artist+"&apikey="+keys.ticketmaster.id)
                         .then(function(result) {
-
                             console.log(result.data);
+                            //console.log venue, location and date of event
                         })
                         .catch(function (err) {
                             console.log("What you entered is not recognized. Please try again and check your spelling.");
