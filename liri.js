@@ -115,7 +115,8 @@ inquirer
                     axios
                         .get("https://app.ticketmaster.com/discovery/v2/events.json?&keyword="+artist+"&apikey="+keys.ticketmaster.id)
                         .then(function(result) {
-                            console.log(result.data);
+                            // console.log(result.data);
+                            console.log(result.data._embedded.events[0].name)
                             //console.log venue, location and date of event
                         })
                         .catch(function (err) {
